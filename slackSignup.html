@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--
+Author: Matt Nutsch
+Date: 12-16-2016
+Description: This code calls the slack API through plain JavaScript.
+-->
+<html>
+    <head>
+        <title>API Call</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            var APIToken = 'xoxp-1234567912345791234579123456791234579'; //comes from creating a token at api.slack.com
+			var APIChannel = 'C38T59LE5'; //unique to each Slack channel
+			
+            document.addEventListener('DOMContentLoaded', bindButtons)
+			
+            function bindButtons()
+            {
+				document.getElementById('testButton').addEventListener('click', function(event)
+				{
+				
+					var emailFromInput = encodeURI(document.getElementById('textInput').value);
+					//var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+					var req = new XMLHttpRequest();
+					req.open("GET", "https://slack.com/api/users.admin.invite?token=" + APIToken + "&email=" + emailFromInput  + "&channel=" + APIChannel + "&pretty=1", true);
+					//req.setRequestHeader('Content-Type', 'application/json');
+					
+					req.addEventListener('load', function()
+					{
+						if(req.status >= 200 && req.status < 400)
+						{
+							var response = JSON.parse(req.responseText);
+							console.log(JSON.parse(req.responseText));
+							var response = JSON.parse(req.responseText);
+							
+							document.getElementById('apiOutput').textContent = req.responseText;
+							
+						}
+						else
+						{
+							console.log("Error in network request: " + request.statusText)
+						}
+					});
+					
+					req.send(null);
+					
+					
+					
+					event.preventDefault();
+					
+                })
+			}
+        </script>
+    </head>
+    <body>
+        
+        <form>
+            <fieldset>
+                <legend>Form</legend>
+                <label for="textInput">Email Address</label>
+                <input type="text" name="textInput" id="textInput">
+                <input type="submit" id="testButton">
+            </fieldset>
+        </form>
+        <div>
+			
+            <h2>Result</h2>
+            <ul>
+                    <li><span>Full Output: </span><span id="apiOutput"></span> </li>
+            </ul>
+        </div>
+    </body>
+</html>
